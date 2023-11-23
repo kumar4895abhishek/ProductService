@@ -1,2 +1,4 @@
-package com.example.productservice.services;public class SelfProductServiceImpl {
+package com.example.productservice.services;
+
+public class SelfProductServiceImpl {
 }
