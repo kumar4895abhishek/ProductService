@@ -2,7 +2,9 @@ package com.example.productservice.services;
 
 import com.example.productservice.dtos.FakeStoreProductDto;
 import com.example.productservice.dtos.GenericProductDto;
+import com.example.productservice.exceptions.ProductNotFoundException;
 import org.springframework.boot.web.client.RestTemplateBuilder;
+import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -43,14 +45,21 @@ public class FakeStoreProductService implements  ProductService
     }
 
     @Override
-    public GenericProductDto getProductById(Long id) {
+    public GenericProductDto getProductById(Long id) throws ProductNotFoundException {
         RestTemplate restTemplate=restTemplateBuilder.build();
         ResponseEntity<FakeStoreProductDto> responseEntity =
                 restTemplate.getForEntity(specificProductUrl,FakeStoreProductDto.class,id);
 
         System.out.println("CALLING PRODUCT BY ID");
 
-        return convertFakeStoreDtoToGenericProductDto(responseEntity.getBody());
+        GenericProductDto genericProductDto=convertFakeStoreDtoToGenericProductDto(responseEntity.getBody());
+
+        if(genericProductDto ==null)
+        {
+            throw new ProductNotFoundException("Product with id:  "+id+" doesn't exist.");
+        }
+
+        return genericProductDto;
     }
 
     @Override
@@ -101,7 +110,24 @@ public class FakeStoreProductService implements  ProductService
     }
 
     @Override
-    public void updateProductById() {
+    public GenericProductDto updateProductById(Long id,GenericProductDto genericProductDto) {
+        RestTemplate restTemplate= restTemplateBuilder.build();
 
+        //RequestCallback requestCallback = restTemplate.acceptHeaderRequestCallback(FakeStoreProductDto.class);
+//        ResponseExtractor<ResponseEntity<FakeStoreProductDto>> responseExtractor =
+//                restTemplate.responseEntityExtractor(FakeStoreProductDto.class);
+
+        RequestCallback requestCallback = restTemplate.httpEntityCallback(new HttpEntity<>(GenericProductDto.class));
+        ResponseExtractor<ResponseEntity<FakeStoreProductDto>> responseExtractor =
+                restTemplate.responseEntityExtractor(FakeStoreProductDto.class);
+
+
+//        ResponseEntity <FakeStoreProductDto> responseEntity=
+//                restTemplate.execute(specificProductUrl,HttpMethod.PUT,requestCallback,responseExtractor, id);
+        ResponseEntity<FakeStoreProductDto> responseEntity =
+                restTemplate.exchange(specificProductUrl, HttpMethod.PUT, new HttpEntity<>(genericProductDto) , FakeStoreProductDto.class, id);
+        System.out.println("CALLING UPDATE");
+
+        return convertFakeStoreDtoToGenericProductDto(responseEntity.getBody());
     }
 }
