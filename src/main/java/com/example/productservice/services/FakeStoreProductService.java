@@ -12,6 +12,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.client.RequestCallback;
 import org.springframework.web.client.ResponseExtractor;
 import org.springframework.web.client.RestTemplate;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -19,7 +22,9 @@ import java.util.List;
 @Service("FakeStoreProductService")
 public class FakeStoreProductService implements  ProductService
 {
-        private FakeStoreClientAdapater fakeStoreClientAdapater;
+    //private final Logger logger = LoggerFactory.getLogger(ProductService.class);
+
+    private FakeStoreClientAdapater fakeStoreClientAdapater;
 
         FakeStoreProductService(FakeStoreClientAdapater fakeStoreClientAdapater)
         {
@@ -46,6 +51,11 @@ public class FakeStoreProductService implements  ProductService
 
 
         System.out.println("CALLING PRODUCT BY ID");
+//        logger.debug("Debug message");
+//        logger.warn("Warning message");
+//        logger.info("Info message");
+//
+//        logger.error("Error message");
 
 
 
@@ -93,4 +103,6 @@ public class FakeStoreProductService implements  ProductService
 
         return convertFakeStoreDtoToGenericProductDto(fakeStoreClientAdapater.updateProductById(id,genericProductDto));
     }
+
+
 }
