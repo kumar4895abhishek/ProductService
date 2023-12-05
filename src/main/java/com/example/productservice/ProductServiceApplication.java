@@ -11,6 +11,8 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
+import java.util.List;
+
 @SpringBootApplication
 public class ProductServiceApplication implements CommandLineRunner {
     private final CategoryRepository categoryRepository;
@@ -35,24 +37,30 @@ public class ProductServiceApplication implements CommandLineRunner {
     @Override
     public void run(String... args) throws Exception {
 
-        Price price = new Price();
-        price.setCurrency("INR");
-        price.setValue(100000);
+//        Price price = new Price();
+//        price.setCurrency("INR");
+//        price.setValue(40000);
+//
+//        Price savePrice = priceRepository.save(price);
+//
+//        Category category=new Category();
+//        category.setName("Samsung Devices");
+//        Category savedCategoy = categoryRepository.save(category);
+//
+//
+//        Product product = new Product();
+//        product.setTitle("Samsung Foldable Phone");
+//        product.setDescription("Nice Phone");
+//        product.setCategory(savedCategoy);
+//        product.setPrice(price);
 
-        Price savePrice = priceRepository.save(price);
+//        Product savedProduct = productRepository.save(product);
 
-        Category category=new Category();
-        category.setName("Apple Devices");
-        Category savedCategoy = categoryRepository.save(category);
+        List<Product> productList=productRepository.findAllByTitle("Samsung Foldable Phone");
 
+        List<Product> productList1=productRepository.findProductByCategory_Name("Apple Devices");
 
-        Product product = new Product();
-        product.setTitle("iPhone 15 pro");
-        product.setDescription("Best iPhone ever");
-        product.setCategory(savedCategoy);
-        product.setPrice(price);
-
-        Product savedProduct = productRepository.save(product);
+        List<Product> productList2=productRepository.findProductByPrice_ValueBetween(20000,40000);
 
 
     }
