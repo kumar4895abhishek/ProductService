@@ -14,13 +14,14 @@ import org.springframework.test.web.servlet.MockMvc;
 
 import java.util.ArrayList;
 import java.util.List;
+import static org.hamcrest.Matchers.is;
+
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 
 @WebMvcTest(ProductController.class)
@@ -89,7 +90,8 @@ public class ProductControllerWebMvcTest
                 .andExpect(
                         content().string(objectMapper.writeValueAsString(outputGenericProductDto))
                 )
-                .andExpect(status().is(200));
+                .andExpect(jsonPath("$.title",is("Macbook")))
+                .andExpect(jsonPath("$.price",is(200000)));
     }
 
 }
