@@ -4,6 +4,7 @@ package com.example.productservice.controllers;
 import com.example.productservice.dtos.GenericProductDto;
 import com.example.productservice.exceptions.ProductNotFoundException;
 import com.example.productservice.services.ProductService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.web.bind.annotation.*;
 
@@ -16,7 +17,8 @@ public class ProductController
 
     public ProductService productService;
 
-    ProductController(@Qualifier ("FakeStoreProductService") ProductService productService)
+
+    ProductController( ProductService productService)
     {
         this.productService=productService;
     }

@@ -15,4 +15,6 @@ public class Price extends  BaseModel
     private String currency;
 
     private double value;
+
+
 }

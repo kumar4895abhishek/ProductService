@@ -19,6 +19,6 @@ public class Category<C extends BaseModel, U> extends BaseModel
     private String name;
 
 
-    @OneToMany(mappedBy = "category")
+    @OneToMany(fetch = jakarta.persistence.FetchType.EAGER,mappedBy = "category")
     private List<Product> products;
 }
