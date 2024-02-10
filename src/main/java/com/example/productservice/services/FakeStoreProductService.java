@@ -6,6 +6,7 @@ import com.example.productservice.exceptions.ProductNotFoundException;
 import com.example.productservice.thirdpartClients.fakeStoreClient.FakeStoreClientAdapater;
 import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.context.annotation.Primary;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
@@ -27,10 +28,13 @@ public class FakeStoreProductService implements  ProductService
     //private final Logger logger = LoggerFactory.getLogger(ProductService.class);
 
     private FakeStoreClientAdapater fakeStoreClientAdapater;
+    private RedisTemplate<String, FakeStoreProductDto> redisTemplate;
 
-        FakeStoreProductService(FakeStoreClientAdapater fakeStoreClientAdapater)
+
+    FakeStoreProductService(FakeStoreClientAdapater fakeStoreClientAdapater,RedisTemplate redisTemplate)
         {
             this.fakeStoreClientAdapater=fakeStoreClientAdapater;
+            this.redisTemplate = redisTemplate;
         }
 
 
@@ -58,6 +62,13 @@ public class FakeStoreProductService implements  ProductService
 //        logger.info("Info message");
 //
 //        logger.error("Error message");
+        FakeStoreProductDto fakeStoreProductDto = (FakeStoreProductDto) redisTemplate.opsForHash().get("PRODUCTS", id);
+
+        if (fakeStoreProductDto != null) {
+            return convertFakeStoreDtoToGenericProductDto(fakeStoreProductDto);
+        }
+        fakeStoreProductDto = fakeStoreClientAdapater.getProductById(id);
+        redisTemplate.opsForHash().put("PRODUCTS", id, fakeStoreProductDto);
 
 
 

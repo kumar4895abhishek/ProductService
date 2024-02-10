@@ -1,6 +1,7 @@
 package com.example.productservice.models;
 
 
+import com.example.productservice.dtos.GenericProductDto;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -28,6 +29,18 @@ public class Product extends  BaseModel
     private Category category;
 
     private int inventoryCount;
+
+
+    public GenericProductDto from(Product product)
+    {
+        GenericProductDto genericProductDto=new GenericProductDto();
+        genericProductDto.setDescription(product.getDescription());
+        genericProductDto.setTitle(product.getTitle());
+        genericProductDto.setImage(product.getImage());
+
+        return genericProductDto;
+
+    }
 
 
 }
